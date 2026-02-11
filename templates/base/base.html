@@ -12,6 +12,7 @@
     {% block head %}{% endblock %}
 </head>
 <body class="bg-gray-100 text-gray-900 min-h-screen flex flex-col lg:flex-row" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+<div id="toast-anchor" class="toast toast-top toast-end z-[100]"></div>
 
 <div class="drawer lg:drawer-open">
     <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
@@ -24,18 +25,18 @@
                 <h1 class="text-xl font-semibold">{% block page_title %}Sales App{% endblock %}</h1>
             </div>
             <div class="flex items-center">
-                <div class="btn btn-sm btn-ghost">
+                <a href="{% url 'sales:review_cart' %}" class="btn btn-sm btn-ghost">
                     <span class="material-symbols-outlined">shopping_cart</span>
                     <span class="badge badge-sm badge-error text-white">
                         <span id="item_count_badge">{{ cart_item_count|default:"0" }}</span>
                     </span>
-                </div>
+                </a>
             </div>
         </nav>
         <div class="flex-1 p-4">{% block content %}{% endblock %}</div>
     </div>
     <div class="drawer-side bg-white border-r">
-        <label for="my-drawer-2" class="drawer-overlay"></label>
+        <label for="my-drawer-2" class="drawer-overlay" aria-label="close sidebar"></label>
         <div class="flex gap-2 items-center px-6" style="height: 64px">
             <img src="{% static 'images/logo.png' %}" alt="Logo" class="w-12 h-12" />
             <h1 class="font-bold text-lg">Sales App</h1>
@@ -43,7 +44,9 @@
         <ul class="menu text-base-content w-80 p-4">
             <li><a href="{% url 'sales:home' %}"><span class="material-symbols-outlined">home</span><span>Home</span></a></li>
             <li><a href="{% url 'sales:product_list' %}"><span class="material-symbols-outlined">package</span><span>Products</span></a></li>
-            <li><a href="#"><span class="material-symbols-outlined">history</span><span>Sales History</span></a></li>
+            <li><a href="{% url 'sales:order_history' %}"class="{% if request.resolver_match.url_name == 'order_history' %}active{% endif %}"><span class="material-symbols-outlined">history</span><span>Sales History</span>
+    </a>
+</li>        
         </ul>
     </div>
 </div>

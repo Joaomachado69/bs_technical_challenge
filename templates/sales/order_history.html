@@ -1,0 +1,84 @@
+{% extends 'base/base.html' %}
+
+{% block page_title %}Order History{% endblock %}
+
+{% block content %}
+<div class="container mx-auto max-w-5xl py-6">
+    <div class="flex items-center gap-2 mb-8">
+        <span class="material-symbols-outlined text-primary text-3xl">history</span>
+        <h2 class="text-3xl font-bold">Your Past Orders</h2>
+    </div>
+
+    {% if orders %}
+    <div class="space-y-4">
+        {% for order in orders %}
+        <details class="collapse collapse-arrow bg-white border border-base-200 shadow-sm rounded-xl group">
+            <summary class="collapse-title flex justify-between items-center p-6 cursor-pointer list-none">
+                <div class="flex gap-8 pointer-events-none">
+                    <div>
+                        <span class="text-xs font-bold opacity-40 uppercase">Order ID</span>
+                        <p class="font-mono font-bold text-base-content">#{{ order.id }}</p>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold opacity-40 uppercase">Date</span>
+                        <p class="text-base-content">{{ order.created_at|date:"d/m/Y H:i" }}</p>
+                    </div>
+                </div>
+                <div class="text-right mr-10 pointer-events-none">
+                    <span class="text-xs font-bold opacity-40 uppercase">Total Paid</span>
+                    <p class="text-xl font-black text-primary">${{ order.total }}</p>
+                </div>
+            </summary>
+
+            <div class="collapse-content px-6"> 
+                <div class="divider my-0 opacity-50"></div>
+                <div class="py-4 overflow-x-auto">
+                    <table class="table table-sm w-full">
+                        <thead>
+                            <tr class="opacity-50">
+                                <th>Product</th>
+                                <th class="text-center">Unit Price</th>
+                                <th class="text-center">Qty</th>
+                                <th class="text-right">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items.all %}
+                            <tr>
+                                <td>
+                                    <div class="flex items-center gap-3">
+                                        <div class="mask mask-squircle w-10 h-10 bg-base-100 border border-base-200">
+                                            {% if item.product.image %}
+                                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
+                                            {% else %}
+                                                <div class="w-full h-full flex items-center justify-center opacity-20">
+                                                    <span class="material-symbols-outlined text-xs">image</span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <span class="font-medium">{{ item.product.name }}</span>
+                                    </div>
+                                </td>
+                                <td class="text-center font-mono">${{ item.price }}</td>
+                                <td class="text-center font-bold">{{ item.quantity }}</td>
+                                <td class="text-right font-bold text-base-content/70">
+                                    ${{ item.subtotal }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </details>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="text-center py-20 bg-white rounded-2xl border border-dashed border-base-300">
+        <p class="text-xl opacity-40 font-medium">You haven't placed any orders yet.</p>
+        <a href="{% url 'sales:product_list' %}" class="btn btn-primary mt-6">Browse Products</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -6,6 +6,12 @@
 <div id="cart-control-modal-{{ product.id }}" hx-swap-oob="true">
     {% include "sales/partials/_cart_control.html" %}
 </div>
+<span id="subtotal-{{ product.id }}" hx-swap-oob="innerHTML">
+    ${{ item.subtotal|default:"0.00" }}
+</span>
+<span id="order-total" hx-swap-oob="innerHTML">
+    ${{ cart_total|default:"0.00" }}
+</span>
 <span id="item_count_badge" hx-swap-oob="innerHTML">
     {{ cart_item_count }}
 </span>

@@ -1,36 +1,46 @@
 <div class="cart-control-wrapper">
     {% if item and item.quantity > 0 %}
         <div class="join border border-primary">
-            <button class="btn btn-sm btn-ghost join-item"
+            <button class="btn btn-sm btn-ghost join-item relative"
                     hx-post="{% url 'sales:update_cart' product.id %}"
                     hx-vals='{"quantity": "{{ item.quantity|add:"-1" }}"}'
                     hx-target="closest .cart-control-wrapper"
-                    hx-swap="outerHTML">
+                    hx-swap="outerHTML"
+                    hx-indicator="#spinner-dec-{{ product.id }}">
+                
                 <span class="material-symbols-outlined text-sm">remove</span>
+                <span id="spinner-dec-{{ product.id }}" class="htmx-indicator loading loading-spinner loading-xs absolute"></span>
             </button>
             
             <span class="join-item px-4 flex items-center justify-center bg-white font-bold min-w-[3rem] text-sm">
                 {{ item.quantity }}
             </span>
             
-            <button class="btn btn-sm btn-ghost join-item"
+            <button class="btn btn-sm btn-ghost join-item relative"
                     hx-post="{% url 'sales:update_cart' product.id %}"
                     hx-vals='{"quantity": "{{ item.quantity|add:"1" }}"}'
                     hx-target="closest .cart-control-wrapper"
                     hx-swap="outerHTML"
+                    hx-indicator="#spinner-inc-{{ product.id }}"
                     {% if item.quantity >= product.stock_qty %}disabled{% endif %}>
+                
                 <span class="material-symbols-outlined text-sm">add</span>
+                <span id="spinner-inc-{{ product.id }}" class="htmx-indicator loading loading-spinner loading-xs absolute"></span>
             </button>
         </div>
     {% else %}
-        <button class="btn btn-primary btn-sm w-full gap-2"
+        <button class="btn btn-primary btn-sm w-full gap-2 relative"
                 hx-post="{% url 'sales:update_cart' product.id %}"
                 hx-vals='{"quantity": "1"}'
                 hx-target="closest .cart-control-wrapper"
                 hx-swap="outerHTML"
+                hx-indicator="#spinner-main-{{ product.id }}"
                 {% if product.stock_qty <= 0 %}disabled{% endif %}>
+            
             <span class="material-symbols-outlined text-sm">shopping_cart</span>
-            {% if product.stock_qty > 0 %}Add to cart{% else %}Out of stock{% endif %}
+            <span>{% if product.stock_qty > 0 %}Add to cart{% else %}Out of stock{% endif %}</span>
+            
+            <span id="spinner-main-{{ product.id }}" class="htmx-indicator loading loading-spinner loading-xs absolute right-2"></span>
         </button>
     {% endif %}
 </div>
