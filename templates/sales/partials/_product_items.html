@@ -12,12 +12,10 @@
 
     <div class="card-body p-4">
         <h2 class="card-title text-sm font-bold h-12 overflow-hidden">{{ product.name }}</h2>
-        
         <div class="flex justify-between items-center mt-2">
             <span class="text-lg font-bold text-primary">${{ product.price }}</span>
-            <span class="text-xs badge badge-ghost">Stock: {{ product.stock }}</span>
+            <span class="text-xs badge badge-ghost">Stock: {{ product.stock_qty }}</span>
         </div>
-        
         <div class="card-actions justify-between mt-4">
             <button class="btn btn-ghost btn-xs text-primary"
                     hx-get="{% url 'sales:product_detail_modal' product.pk %}"
@@ -25,16 +23,10 @@
                     hx-swap="innerHTML">
                 View details
             </button>
-
-            <button class="btn btn-primary btn-sm">
-                Add to cart
-            </button>
+            <div id="cart-control-{{ product.id }}" class="flex-grow flex justify-end">
+                {% include "sales/partials/_cart_control.html" with product=product item=product.cart_item %}
+            </div>
         </div>
     </div>
-</div>
-{% empty %}
-<div class="col-span-full text-center py-20 text-base-content/50">
-    <span class="material-symbols-outlined text-6xl mb-2">search_off</span>
-    <p class="text-xl">No products found matching your search.</p>
 </div>
 {% endfor %}

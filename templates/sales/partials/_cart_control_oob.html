@@ -1,0 +1,11 @@
+{% include "sales/partials/_cart_control.html" %}
+
+<div id="cart-control-{{ product.id }}" hx-swap-oob="true" class="flex-grow flex justify-end">
+    {% include "sales/partials/_cart_control.html" %}
+</div>
+<div id="cart-control-modal-{{ product.id }}" hx-swap-oob="true">
+    {% include "sales/partials/_cart_control.html" %}
+</div>
+<span id="item_count_badge" hx-swap-oob="innerHTML">
+    {{ cart_item_count }}
+</span>

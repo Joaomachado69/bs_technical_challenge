@@ -1,65 +1,35 @@
-<dialog id="product_modal" 
-        class="modal" 
-        x-data 
-        x-init="$el.showModal()"
-        @click.self="$el.close()" 
-        @close="$el.remove()"
-        @keydown.escape="$el.close()">
-    
+<dialog id="product_modal" class="modal" x-data x-init="$el.showModal()" @click.self="$el.close()" @close="$el.remove()" @keydown.escape="$el.close()">
     <div class="modal-box max-w-2xl shadow-2xl border border-base-300 relative">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-50" 
-                @click="$el.closest('dialog').close()">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-50" @click="$el.closest('dialog').close()">
             <span class="material-symbols-outlined">close</span>
         </button>
-        
         <div class="flex flex-col md:flex-row gap-8">
             <div class="w-full md:w-1/2">
                 {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" 
-                         class="rounded-2xl w-full h-64 md:h-full object-cover shadow-inner" />
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="rounded-2xl w-full h-64 md:h-full object-cover shadow-inner" />
                 {% else %}
-                    <div class="bg-base-200 rounded-2xl h-64 md:h-full w-full flex items-center justify-center text-base-content/30">
-                        <span class="material-symbols-outlined text-7xl">image</span>
-                    </div>
+                    <div class="bg-base-200 rounded-2xl h-64 md:h-full w-full flex items-center justify-center text-base-content/30"><span class="material-symbols-outlined text-7xl">image</span></div>
                 {% endif %}
             </div>
-            
             <div class="w-full md:w-1/2 flex flex-col">
                 <h3 class="font-bold text-3xl text-base-content">{{ product.name }}</h3>
-                
-                <div class="flex items-center gap-2 mt-2">
-                    <span class="text-2xl font-bold text-primary">${{ product.price }}</span>
-                </div>
-                
+                <p class="text-2xl font-bold text-primary mt-2">${{ product.price }}</p>
                 <div class="divider my-2"></div>
-
                 <div class="flex-grow">
                     <h4 class="text-xs font-bold uppercase tracking-widest text-base-content/40 mb-2">Description</h4>
-                    <p class="text-base-content/80 leading-relaxed text-sm">
-                        {{ product.description|default:"No description provided for this product." }}
-                    </p>
+                    <p class="text-base-content/80 leading-relaxed text-sm">{{ product.description|default:"No description provided." }}</p>
                 </div>
-
                 <div class="mt-6 border-t pt-4">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-2 text-sm font-medium">
-                            <span class="material-symbols-outlined text-sm">inventory_2</span>
-                            <span>Stock Available:</span>
-                        </div>
-                        <span class="badge {% if product.stock_qty > 0 %}badge-success{% else %}badge-error{% endif %} badge-md font-bold">
-                            {{ product.stock_qty }} units
-                        </span>
+                    <div class="flex items-center justify-between mb-4 text-sm">
+                        <span>Stock Available:</span>
+                        <span class="badge badge-success font-bold">{{ product.stock_qty }} units</span>
                     </div>
-
-                    <button class="btn btn-primary w-full gap-2" 
-                            {% if product.stock_qty <= 0 %}disabled{% endif %}>
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        {% if product.stock_qty > 0 %}Add to Cart{% else %}Out of Stock{% endif %}
-                    </button>
+                    <div id="cart-control-modal-{{ product.id }}">
+                        {% include "sales/partials/_cart_control.html" with product=product item=item %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="modal-backdrop bg-black/50"></div>
 </dialog>
