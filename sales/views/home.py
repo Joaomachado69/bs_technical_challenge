@@ -3,6 +3,7 @@ from sales.models import Cart
 from django.db.models import Sum
 
 __all__ = ["home_view"]
+
 def home_view(request):
     cart_id = request.session.get('cart_id')
     cart = Cart.objects.filter(id=cart_id).first() if cart_id else None

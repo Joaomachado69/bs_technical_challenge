@@ -5,14 +5,14 @@
 {% endblock %}
 
 {% block content %}
-<div class="flex flex-col gap-6">
-    <div class="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
-        <div class="form-control w-full max-w-xs relative">
+<div class="flex flex-col gap-6 p-2 sm:p-4">
+    <div class="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-base-200 gap-4">
+        <div class="form-control w-full md:max-w-xs relative text-gray-400">
             <input 
                 type="text" 
                 name="q" 
                 placeholder="Search products..." 
-                class="input input-bordered w-full"
+                class="input input-bordered w-full text-base-content"
                 hx-get="{% url 'sales:product_list' %}"
                 hx-trigger="keyup changed delay:300ms, search"
                 hx-target="#product-grid"
@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center">
         {% include "sales/partials/_product_items.html" %}
     </div>
 </div>
