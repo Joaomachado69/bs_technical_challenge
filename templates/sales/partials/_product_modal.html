@@ -1,29 +1,67 @@
-<dialog id="product_modal" class="modal" x-data x-init="$el.showModal()" @click.self="$el.close()" @close="$el.remove()" @keydown.escape="$el.close()">
-    <div class="modal-box max-w-2xl shadow-2xl border border-base-300 relative">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-50" @click="$el.closest('dialog').close()">
+<dialog id="product_modal" 
+        class="modal" 
+        x-data 
+        x-init="$el.showModal()"
+        @click.self="$el.close()" 
+        @close="$el.remove()"
+        @keydown.escape="$el.close()">
+    
+    <div class="modal-box max-w-5xl shadow-2xl border border-base-300 relative p-0 overflow-hidden">
+        <button class="btn btn-sm btn-circle btn-neutral absolute right-4 top-4 z-50 shadow-lg" 
+                @click="$el.closest('dialog').close()">
             <span class="material-symbols-outlined">close</span>
         </button>
-        <div class="flex flex-col md:flex-row gap-8">
-            <div class="w-full md:w-1/2">
+        
+        <div class="flex flex-col lg:flex-row min-h-[500px]">
+            <div class="w-full lg:w-1/2 bg-base-200 flex items-center justify-center p-4">
                 {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="rounded-2xl w-full h-64 md:h-full object-cover shadow-inner" />
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+                         class="w-full h-auto max-h-[600px] object-contain drop-shadow-2xl" />
                 {% else %}
-                    <div class="bg-base-200 rounded-2xl h-64 md:h-full w-full flex items-center justify-center text-base-content/30"><span class="material-symbols-outlined text-7xl">image</span></div>
+                    <div class="flex flex-col items-center opacity-20">
+                        <span class="material-symbols-outlined text-9xl">image</span>
+                        <p class="font-bold uppercase">No image available</p>
+                    </div>
                 {% endif %}
             </div>
-            <div class="w-full md:w-1/2 flex flex-col">
-                <h3 class="font-bold text-3xl text-base-content">{{ product.name }}</h3>
-                <p class="text-2xl font-bold text-primary mt-2">${{ product.price }}</p>
-                <div class="divider my-2"></div>
+            
+            <div class="w-full lg:w-1/2 flex flex-col p-8 lg:p-12">
                 <div class="flex-grow">
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-base-content/40 mb-2">Description</h4>
-                    <p class="text-base-content/80 leading-relaxed text-sm">{{ product.description|default:"No description provided." }}</p>
-                </div>
-                <div class="mt-6 border-t pt-4">
-                    <div class="flex items-center justify-between mb-4 text-sm">
-                        <span>Stock Available:</span>
-                        <span class="badge badge-success font-bold">{{ product.stock_qty }} units</span>
+                    <span class="badge badge-ghost font-bold mb-2 uppercase tracking-widest text-xs">
+                        {{ product.brand|default:"Brand New" }}
+                    </span>
+                    <h3 class="font-black text-4xl text-base-content leading-tight mb-4">
+                        {{ product.name }}
+                    </h3>
+                    
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="text-3xl font-bold text-primary">${{ product.price }}</span>
+                        {% if product.stock_qty > 0 %}
+                            <div class="badge badge-success badge-outline font-bold">In Stock</div>
+                        {% else %}
+                            <div class="badge badge-error badge-outline font-bold text-error">Out of Stock</div>
+                        {% endif %}
                     </div>
+                    
+                    <div class="divider"></div>
+
+                    <h4 class="text-sm font-bold uppercase tracking-widest opacity-50 mb-3">About this product</h4>
+                    <p class="text-base-content/80 leading-relaxed text-lg mb-8">
+                        {{ product.description|default:"No description provided for this product. High quality guaranteed." }}
+                    </p>
+                </div>
+
+                <div class="mt-auto pt-6 border-t border-base-200">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-2 text-sm font-medium">
+                            <span class="material-symbols-outlined text-lg">inventory_2</span>
+                            <span>Stock:</span>
+                        </div>
+                        <span class="font-black text-lg {% if product.stock_qty <= 0 %}text-error{% endif %}">
+                            {% if product.stock_qty > 0 %}{{ product.stock_qty }} units{% else %}Out of stock{% endif %}
+                        </span>
+                    </div>
+
                     <div id="cart-control-modal-{{ product.id }}">
                         {% include "sales/partials/_cart_control.html" with product=product item=item %}
                     </div>
@@ -31,5 +69,5 @@
             </div>
         </div>
     </div>
-    <div class="modal-backdrop bg-black/50"></div>
+    <div class="modal-backdrop bg-black/60 backdrop-blur-sm"></div>
 </dialog>
